@@ -1,0 +1,33 @@
+{
+    "messages": [
+        {
+            "@type": "/injective.tokenfactory.v1beta1.MsgSetDenomMetadata",
+            "sender": "inj10d07y265gmmuvt4z0w9aw880jnsr700jstypyt",
+            "metadata": {
+                "description": "Injective Test Token",
+                "denom_units": [
+                    {
+                        "aliases": [],
+                        "denom": "peggy0xdAC17F958D2ee523a2206206994597C13D831ec7",
+                        "exponent": 0
+                    },
+                    {
+                        "aliases": [],
+                        "denom": "USDT",
+                        "exponent": "6"
+                    }
+                ],
+                "base": "peggy0xdAC17F958D2ee523a2206206994597C13D831ec7",
+                "display": "USDT",
+                "name": "USDT",
+                "symbol": "USDT",
+                "uri": "http://injective-test.com/icon.jpg",
+                "decimals": 6
+            }
+        }
+    ],
+    "metadata": "",
+    "deposit": "100000000000000000000inj",
+    "title": "Update denom metadata",
+    "summary": "This proposal, if passed, will update the USDT metadata."
+}
