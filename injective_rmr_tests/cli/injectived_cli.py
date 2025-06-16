@@ -107,17 +107,25 @@ class QueryGroup:
             json_output=json_output,
         )
 
+    def derivative_market(
+        self, market_id: str, json_output: bool = True
+    ) -> subprocess.CompletedProcess:
+        return self.cli.run(
+            [
+                "q",
+                "exchange",
+                "derivative-market",
+                market_id,
+                "--chain-id",
+                self.cli.chain_id,
+            ],
+            json_output=json_output,
+        )["market"]
+
     def get_market_by_ticker(self, ticker: str) -> Optional[dict[str, Any]]:
         data = self.derivative_markets(json_output=True)
         for market in data["markets"]:
             if market["market"]["ticker"] == ticker:
-                return market
-        return None
-
-    def get_market_by_id(self, market_id: str) -> Optional[dict[str, Any]]:
-        data = self.derivative_markets(json_output=True)
-        for market in data["markets"]:
-            if market["market"]["market_id"] == market_id:
                 return market
         return None
 
@@ -155,8 +163,10 @@ if __name__ == "__main__":
     resp = cli.query.derivative_markets()
     print(resp)
     market_id = "0x8fde97d09cbdf47ad5ee9d076d0be329c30af3357946e038ef9f6d14a083f692"
+    resp = cli.query.derivative_market(market_id)
+    print(resp)
 
-    resp = cli.tx.update_derivative_market_rmr(
-        market_id=market_id, new_rmr="0.99", from_acct="testcandidate"
-    )
-    print(resp.stdout)
+    # resp = cli.tx.update_derivative_market_rmr(
+    #     market_id=market_id, new_rmr="0.99", from_acct="testcandidate"
+    # )
+    # print(resp.stdout)

@@ -6,7 +6,7 @@ def test_mu_4_update_rmr_eq_imr(perpetual_market_setup):
     cli = InjectivedCLI()
 
     market_id = perpetual_market_setup
-    market = cli.query.get_market_by_id(market_id)
+    market = cli.query.derivative_market(market_id)
     assert market is not None
     assert float(market["market"]["reduce_margin_ratio"]) != float(
         market["market"]["initial_margin_ratio"]
@@ -25,7 +25,7 @@ def test_mu_4_update_rmr_eq_imr(perpetual_market_setup):
         cli=cli,
     )
 
-    updated_market_info = cli.query.get_market_by_id(market_id)
+    updated_market_info = cli.query.derivative_market(market_id)
 
     assert updated_market_info is not None
     assert float(updated_market_info["market"]["reduce_margin_ratio"]) == float(
