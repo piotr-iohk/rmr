@@ -1,5 +1,6 @@
 [tool.poetry]
-name = "injective-rmr-tests"
+name = "injective_rmr_tests"
+packages = [{ include = "cli" }]
 version = "0.1.0"
 description = ""
 authors = ["Piotr Stachyra <piotr.stachyra@gmail.com>"]
