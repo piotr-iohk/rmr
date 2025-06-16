@@ -59,6 +59,35 @@ class TxGroup:
     def __init__(self, cli: InjectivedCLI):
         self.cli = cli
 
+    def update_derivative_market_rmr(
+        self,
+        market_id: str,
+        new_rmr: str,
+        from_acct: str,
+        passphrase: Optional[str] = None,
+    ) -> subprocess.CompletedProcess:
+        return self.cli.run(
+            [
+                "tx",
+                "exchange",
+                "update-derivative-market",
+                market_id,
+                "--reduce-margin-ratio",
+                new_rmr,
+                "--from",
+                from_acct,
+                "--chain-id",
+                self.cli.chain_id,
+                "--gas-prices",
+                "500000000inj",
+                "--gas",
+                "10000000",
+                "--yes",
+            ],
+            passphrase=passphrase or self.cli.passphrase,
+            passphrase_repeats=1,
+        )
+
 
 class QueryGroup:
     def __init__(self, cli: InjectivedCLI):
@@ -82,6 +111,13 @@ class QueryGroup:
         data = self.derivative_markets(json_output=True)
         for market in data["markets"]:
             if market["market"]["ticker"] == ticker:
+                return market
+        return None
+
+    def get_market_by_id(self, market_id: str) -> Optional[dict[str, Any]]:
+        data = self.derivative_markets(json_output=True)
+        for market in data["markets"]:
+            if market["market"]["market_id"] == market_id:
                 return market
         return None
 
@@ -118,3 +154,9 @@ if __name__ == "__main__":
     cli = InjectivedCLI()
     resp = cli.query.derivative_markets()
     print(resp)
+    market_id = "0x8fde97d09cbdf47ad5ee9d076d0be329c30af3357946e038ef9f6d14a083f692"
+
+    resp = cli.tx.update_derivative_market_rmr(
+        market_id=market_id, new_rmr="0.99", from_acct="testcandidate"
+    )
+    print(resp.stdout)
