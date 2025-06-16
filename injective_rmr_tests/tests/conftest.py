@@ -3,7 +3,9 @@ import subprocess
 import shutil
 import signal
 import time
+from typing import Any
 import pytest
+from cli.injectived_cli import InjectivedCLI
 from pathlib import Path
 
 
@@ -45,3 +47,24 @@ def local_chain():
     except Exception:
         # Force-kill if still alive
         os.killpg(os.getpgid(node_proc.pid), signal.SIGKILL)
+
+
+@pytest.fixture(scope="session")
+def perpetual_market_setup(local_chain):
+    """Create a base perpetual market for tests."""
+    rmr = "0.099"  # Reduce Margin Ratio
+    imr = "0.09"  # Initial Margin Ratio
+    mmr = "0.01"  # Maintenance Margin Ratio
+
+    root_dir = Path(__file__).resolve().parent.parent.parent
+    setup_script = root_dir / "setup_tst_usdt_perp.sh"
+
+    print("\n🚀 Creating base perpetual market...")
+    subprocess.run([str(setup_script), rmr, imr, mmr], cwd=root_dir, check=True)
+
+    cli = InjectivedCLI()
+    market = cli.query.get_market_by_ticker("TST/USDT PERP")
+    if not market:
+        pytest.exit("❌ Market creation failed or not found.")
+
+    return market["market"]["market_id"]
