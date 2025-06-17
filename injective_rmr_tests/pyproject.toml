@@ -9,6 +9,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.10"
 pytest = "^8.4.0"
+allure-pytest = "^2.14.3"
 
 
 [tool.poetry.group.dev.dependencies]
